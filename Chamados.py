@@ -73,6 +73,7 @@ def usuarios():
     sleep(0.4)
     navegador.find_element(By.XPATH, '//*[@id="s2id_autogen6_search"]').send_keys(Keys.ENTER)
     sleep(0.4)
+    navegador.find_element(By.XPATH, '//*[@id="select2-chosen-24"]').click
     print('=' * 20)
     print('Requerente Adicionado')
 
@@ -95,7 +96,7 @@ if op1 == 1:  # Chamado generico
     desc = str(input('Digite a descrição do Chamado: '))
     if nav == 1:
         navegador = webdriver.Chrome()  # Abre o Navegador
-        navegador.get('http://glpi/glpi/front/ticket.php')  # Abre o GLPI
+        navegador.maximize_window()
         print('=' * 20)
         print('Navegador Aberto')
     elif nav == 2:
@@ -166,8 +167,9 @@ if op1 == 1:  # Chamado generico
 elif op1 == 2:  # Cupom fiscal não impresso
     if nav == 1:
         navegador = webdriver.Chrome()  # Abre o Navegador
-        print('Navegador Aberto')
+        navegador.maximize_window()
         print('=' * 20)
+        print('Navegador Aberto')
     elif nav == 2:
         # abertura de chamado convencional
         chrome_options = Options()
@@ -229,9 +231,10 @@ elif op1 == 2:  # Cupom fiscal não impresso
 elif op1 == 3:  # Forticlient não conecta
     if nav == 1:
         navegador = webdriver.Chrome()  # Abre o Navegador
-        navegador.get('http://glpi/glpi/front/ticket.php')  # Abre o GLPI
+        navegador.maximize_window()
         print('=' * 20)
         print('Navegador Aberto')
+
     elif nav == 2:
         # abertura de chamado convencional
         chrome_options = Options()
@@ -294,7 +297,7 @@ elif op1 == 3:  # Forticlient não conecta
 elif op1 == 4:  # Pinpad não mostra Credito
     if nav == 1:
         navegador = webdriver.Chrome()  # Abre o Navegador
-        navegador.get('http://glpi/glpi/front/ticket.php')  # Abre o GLPI
+        navegador.maximize_window()
         print('=' * 20)
         print('Navegador Aberto')
     elif nav == 2:
@@ -358,7 +361,7 @@ elif op1 == 4:  # Pinpad não mostra Credito
 elif op1 == 5:  # Transmissão com erro
     if nav == 1:
         navegador = webdriver.Chrome()  # Abre o Navegador
-        navegador.get('http://glpi/glpi/front/ticket.php')  # Abre o GLPI
+        navegador.maximize_window()
         print('=' * 20)
         print('Navegador Aberto')
     elif nav == 2:
@@ -428,7 +431,7 @@ elif op1 == 5:  # Transmissão com erro
 elif op1 == 6:
     if nav == 1:
         navegador = webdriver.Chrome()  # Abre o Navegador
-        navegador.get('http://glpi/glpi/front/ticket.php')  # Abre o GLPI
+        navegador.maximize_window()
         print('=' * 20)
         print('Navegador Aberto')
     elif nav == 2:
