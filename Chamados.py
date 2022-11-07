@@ -28,21 +28,23 @@ print('-' * 13)
 usuario = input('Usuario: ')
 senha = input('Senha: ')
 os.system('cls') or None
-print(f'Logado como: {usuario}')
 
 while True:
+    print('')
+    print(f'Logado como: \033[36m{usuario}\033[m')
+
     print('=' * 20)
     print('Abertura de chamados')
     print('=' * 20)
 
     op1 = leiaInt('Qual chamado deseja abrir?\n'
-                  '[ 1 ] Chamado Generico\n'
-                  '[ 2 ] Cupom fiscal não impresso\n'
-                  '[ 3 ] Forticliente não conecta\n'
-                  '[ 4 ] PinPad não aparece Debito\n'
-                  '[ 5 ] Erro de Transmissão\n'
-                  '[ 6 ] Loja sem Internet\n'
-                  '[ 7 ] Sistema Fora do AR\n'
+                  '\033[36m[ 1 ]\033[m Chamado Generico\n'
+                  '\033[36m[ 2 ]\033[m Cupom fiscal não impresso\n'
+                  '\033[36m[ 3 ]\033[m Forticliente não conecta\n'
+                  '\033[36m[ 4 ]\033[m PinPad- Opção Debito / Não Encontrado\n'
+                  '\033[36m[ 5 ]\033[m Sistema travado\n'
+                  '\033[36m[ 6 ]\033[m Cancelamento de Transação\n'
+                  '\033[36m[ 7 ]\033[m Servidor Fora do AR\n'
                   'Sua Opção -> ')
 
     nav = leiaInt('Deseja ver o processo de abertura?\n'
@@ -51,7 +53,6 @@ while True:
                   'Sua Opção ->')
 
     nome = str(input('Qual usuario do requerente? -> '))
-
 
     def usuarios():
         sleep(0.4)
@@ -153,6 +154,7 @@ while True:
         sleep(1)
 
     elif op1 == 2:  # Cupom fiscal não impresso
+        terminal = leiaInt('Qual terminal? ->')
         if nav == 1:
             navegador = webdriver.Chrome()  # Abre o Navegador
             navegador.maximize_window()
@@ -204,7 +206,7 @@ while True:
         # Descrição
         navegador.find_element(By.NAME, 'content').send_keys(Keys.CONTROL, 'a')
         sleep(0.3)
-        navegador.find_element(By.NAME, 'content').send_keys('Cupom fiscal, Slip ou Recibo do pix não impresso')
+        navegador.find_element(By.NAME, 'content').send_keys(f'Cupom fiscal, Slip ou Recibo do pix não impresso no terminal {terminal}')
         print('=' * 20)
         print('Descrição Adicionada')
 
@@ -217,6 +219,7 @@ while True:
         sleep(1)
 
     elif op1 == 3:  # Forticlient não conecta
+        terminal = leiaInt('Qual terminal? ->')
         if nav == 1:
             navegador = webdriver.Chrome()  # Abre o Navegador
             navegador.maximize_window()
@@ -270,7 +273,7 @@ while True:
         navegador.find_element(By.NAME, 'content').send_keys(Keys.CONTROL, 'a')
         sleep(0.3)
         navegador.find_element(By.NAME, 'content').send_keys(
-            ' Ao tentar conectar o FortiClient, aparece um erro sobre falha de VPN.')
+            f' Ao tentar conectar o FortiClient, aparece um erro sobre falha de VPN no terminal {terminal}.')
         print('=' * 20)
         print('Descrição Adicionada')
 
@@ -283,6 +286,13 @@ while True:
         sleep(1)
 
     elif op1 == 4:  # Pinpad não mostra Credito
+        terminal = leiaInt('Qual terminal? ->')
+        print('')
+        x = leiaInt('Qual erro esta apresentando?\n'
+                    '[ 1 ] Opção Debito\n'
+                    '[ 2 ] Pinpad não encontrado\n'
+                    'Sua Opção -> ')
+
         if nav == 1:
             navegador = webdriver.Chrome()  # Abre o Navegador
             navegador.maximize_window()
@@ -301,11 +311,9 @@ while True:
         navegador.get('http://glpi/glpi/front/ticket.php')  # Abre o GLPI
         navegador.find_element('xpath', '//*[@id="login_name"]').send_keys(usuario)  # Coloca usuario
         navegador.find_element('xpath', '//*[@id="login_password"]').send_keys(senha)  # Coloca senha
-        navegador.find_element('xpath', '//*[@id="boxlogin"]/form/p[3]/input').send_keys(
-            Keys.ENTER)  # Clica em enter para acessar
+        navegador.find_element('xpath', '//*[@id="boxlogin"]/form/p[3]/input').send_keys(Keys.ENTER)  # Clica em enter para acessar
         navegador.find_element('xpath', '//*[@id="menu_all_button"]').send_keys(Keys.ENTER)  # Abre o Menu
-        navegador.find_element('xpath', '//*[@id="show_all_menu"]/table[2]/tbody/tr[3]/td/a').send_keys(
-            Keys.ENTER)  # Clica para abrir chamados
+        navegador.find_element('xpath', '//*[@id="show_all_menu"]/table[2]/tbody/tr[3]/td/a').send_keys(Keys.ENTER)  # Clica para abrir chamados
         print('=' * 20)
         print('GLPI Aberto')
 
@@ -322,21 +330,38 @@ while True:
         print('=' * 20)
         print('Categoria Adicionada')
 
-        # Titulo
-        navegador.find_element(By.XPATH, '//*[@id="mainformtable4"]/tbody/tr[1]/td/input').send_keys(Keys.CONTROL, 'a')
-        sleep(0.3)
-        navegador.find_element(By.XPATH, '//*[@id="mainformtable4"]/tbody/tr[1]/td/input').send_keys('Tef sem debito')
-        sleep(0.6)
-        print('=' * 20)
-        print('Titulo Adicionado')
+        if x == 1:
+            # Titulo
+            navegador.find_element(By.XPATH, '//*[@id="mainformtable4"]/tbody/tr[1]/td/input').send_keys(Keys.CONTROL, 'a')
+            sleep(0.3)
+            navegador.find_element(By.XPATH, '//*[@id="mainformtable4"]/tbody/tr[1]/td/input').send_keys('Tef sem opção debito')
+            sleep(0.6)
+            print('=' * 20)
+            print('Titulo Adicionado')
 
-        # Descrição
-        navegador.find_element(By.NAME, 'content').send_keys(Keys.CONTROL, 'a')
-        sleep(0.3)
-        navegador.find_element(By.NAME, 'content').send_keys(
-            'Quando tento passar uma venda o tef não apresenta a opção debito')
-        print('=' * 20)
-        print('Descrição Adicionada')
+            # Descrição
+            navegador.find_element(By.NAME, 'content').send_keys(Keys.CONTROL, 'a')
+            sleep(0.3)
+            navegador.find_element(By.NAME, 'content').send_keys(f'Quando tento passar uma venda o tef não apresenta a opção debito no terminal {terminal}')
+            print('=' * 20)
+            print('Descrição Adicionada')
+        elif x == 2:
+            # Titulo
+            navegador.find_element(By.XPATH, '//*[@id="mainformtable4"]/tbody/tr[1]/td/input').send_keys(Keys.CONTROL,'a')
+            sleep(0.3)
+            navegador.find_element(By.XPATH, '//*[@id="mainformtable4"]/tbody/tr[1]/td/input').send_keys('Pinpad não encontrado')
+            sleep(0.6)
+            print('=' * 20)
+            print('Titulo Adicionado')
+
+            # Descrição
+            navegador.find_element(By.NAME, 'content').send_keys(Keys.CONTROL, 'a')
+            sleep(0.3)
+            navegador.find_element(By.NAME, 'content').send_keys(f'Pinpad não encontrado no terminal {terminal}')
+            print('=' * 20)
+            print('Descrição Adicionada')
+        else:
+            print('Opção invalida')
 
         # Enviar
         navegador.find_element(By.XPATH, '//*[@id="mainformtable4"]/tbody/tr[5]/td/input[1]').click()
@@ -346,7 +371,8 @@ while True:
         print('-' * 14)
         sleep(1)
 
-    elif op1 == 5:  # Transmissão com erro
+    elif op1 == 5:  # Sistema travado
+        terminal = leiaInt('Qual terminal? ->')
         if nav == 1:
             navegador = webdriver.Chrome()  # Abre o Navegador
             navegador.maximize_window()
@@ -380,7 +406,7 @@ while True:
         # Categoria
         navegador.find_element(By.XPATH, '//*[@id="select2-chosen-5"]').click()
         sleep(0.3)
-        navegador.find_element(By.XPATH, '//*[@id="s2id_autogen5_search"]').send_keys('Erro de Transmissão')
+        navegador.find_element(By.XPATH, '//*[@id="s2id_autogen5_search"]').send_keys('Sistema travado')
         sleep(0.3)
         navegador.find_element(By.XPATH, '//*[@id="s2id_autogen5_search"]').send_keys(Keys.ENTER)
         sleep(0.3)
@@ -403,8 +429,7 @@ while True:
         sleep(0.3)
         navegador.find_element(By.NAME, 'content').send_keys(Keys.CONTROL, 'a')
         sleep(0.3)
-        navegador.find_element(By.NAME, 'content').send_keys(
-            'Ao tentar fazer transmissão, aparece um erro em vermelho e não é possivel conclui-la.')
+        navegador.find_element(By.NAME, 'content').send_keys(f'O sistema no terminal {terminal} travou na finalização da venda.')
         print('=' * 20)
         print('Descrição Adicionada')
 
@@ -416,7 +441,8 @@ while True:
         print('-' * 14)
         sleep(1)
 
-    elif op1 == 6:
+    elif op1 == 6: #Cancelamento de transação
+        t = leiaInt('Qual o numero da transação? -> ')
         if nav == 1:
             navegador = webdriver.Chrome()  # Abre o Navegador
             navegador.maximize_window()
@@ -449,7 +475,7 @@ while True:
         # Categoria
         navegador.find_element(By.XPATH, '//*[@id="select2-chosen-5"]').click()
         sleep(0.3)
-        navegador.find_element(By.XPATH, '//*[@id="s2id_autogen5_search"]').send_keys('internet')
+        navegador.find_element(By.XPATH, '//*[@id="s2id_autogen5_search"]').send_keys('sistema sales')
         sleep(0.3)
         navegador.find_element(By.XPATH, '//*[@id="s2id_autogen5_search"]').send_keys(Keys.ENTER)
         sleep(0.3)
@@ -461,7 +487,7 @@ while True:
         sleep(0.3)
         navegador.find_element(By.XPATH, '//*[@id="mainformtable4"]/tbody/tr[1]/td/input').send_keys(Keys.CONTROL, 'a')
         sleep(0.3)
-        navegador.find_element(By.XPATH, '//*[@id="mainformtable4"]/tbody/tr[1]/td/input').send_keys('Loja sem Internet')
+        navegador.find_element(By.XPATH, '//*[@id="mainformtable4"]/tbody/tr[1]/td/input').send_keys('Cancelamento de transação')
         sleep(1)
         print('=' * 20)
         print('Titulo Adicionado')
@@ -471,7 +497,7 @@ while True:
         sleep(0.3)
         navegador.find_element(By.NAME, 'content').send_keys(Keys.CONTROL, 'a')
         sleep(0.3)
-        navegador.find_element(By.NAME, 'content').send_keys(f'Loja {nome} encontra-se sem Internet')
+        navegador.find_element(By.NAME, 'content').send_keys(f'Solicito cancelamento da transação {t}.')
         print('=' * 20)
         print('Descrição Adicionada')
 
@@ -483,7 +509,8 @@ while True:
         print('-' * 14)
         sleep(1)
 
-    elif op1 == 7:
+    elif op1 == 7: #Servidor fora do ar
+        terminal = leiaInt('Qual terminal? ->')
         if nav == 1:
             navegador = webdriver.Chrome()  # Abre o Navegador
             navegador.maximize_window()
@@ -528,7 +555,7 @@ while True:
         sleep(0.3)
         navegador.find_element(By.XPATH, '//*[@id="mainformtable4"]/tbody/tr[1]/td/input').send_keys(Keys.CONTROL, 'a')
         sleep(0.3)
-        navegador.find_element(By.XPATH, '//*[@id="mainformtable4"]/tbody/tr[1]/td/input').send_keys('Sistema Fora do AR')
+        navegador.find_element(By.XPATH, '//*[@id="mainformtable4"]/tbody/tr[1]/td/input').send_keys('Servidor fora do ar')
         sleep(1)
         print('=' * 20)
         print('Titulo Adicionado')
@@ -538,7 +565,7 @@ while True:
         sleep(0.3)
         navegador.find_element(By.NAME, 'content').send_keys(Keys.CONTROL, 'a')
         sleep(0.3)
-        navegador.find_element(By.NAME, 'content').send_keys('Sistema Fora do AR')
+        navegador.find_element(By.NAME, 'content').send_keys(f'Terminal {terminal} esta apresentando a mensagem "Servidor fora do ar" ao tentar passar uma venda')
         print('=' * 20)
         print('Descrição Adicionada')
 
@@ -559,6 +586,7 @@ while True:
                     '[ 2 ] Não\n'
                     'Sua Opção -> '))
     os.system('cls') or None
+    print()
     if op2 == 2:
         print('Finalizando')
         sleep(0.8)
