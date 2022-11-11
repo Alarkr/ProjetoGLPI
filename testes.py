@@ -31,4 +31,4 @@ navegador.find_element(By.XPATH, '//*[@id="ui-tabs-1"]/div[3]/table/tbody/tr[4]/
 sleep(1)
 navegador.find_element(By.XPATH, '//*[@id="mainformtable"]/tbody/tr[7]/td/input[1]').click()
 
-
+teste
